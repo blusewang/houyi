@@ -37,12 +37,12 @@ func New() *Engine {
 	}
 	e.engine = e
 	e.pool.New = func() interface{} {
-		return &Context{engine:e}
+		return &Context{engine: e}
 	}
 	return e
 }
 
-func (e *Engine) Handle(path string,data []byte) (err error) {
+func (e *Engine) Handle(path string, data []byte) (result []byte, err error) {
 	if e.lines[path] != nil {
 		c := e.pool.Get().(*Context)
 		c.path = path
@@ -51,11 +51,12 @@ func (e *Engine) Handle(path string,data []byte) (err error) {
 		c.handlers = e.lines[path]
 
 		err = c.Next()
+		result = c.GetResult()
 
 		e.pool.Put(c)
-	}else{
+	} else {
 		log.Println(e.lines)
-		err = fmt.Errorf("[%v]没有可命中的服务",path)
+		err = fmt.Errorf("[%v]没有可命中的服务", path)
 	}
 	return
 }

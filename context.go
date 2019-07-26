@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
+	"unicode/utf8"
 )
 
 type Context struct {
@@ -11,6 +12,7 @@ type Context struct {
 	index    int8
 	path     string
 	data     []byte
+	result   []byte
 	engine   *Engine
 }
 
@@ -32,13 +34,32 @@ func (c *Context) BindJson(o interface{}) (err error) {
 	return
 }
 
+func (c *Context) String() (data string) {
+	if utf8.Valid(c.data) {
+		return string(c.data)
+	}
+	return
+}
+
+func (c *Context) GetPath() (data string) {
+	return c.path
+}
+
+func (c *Context) SetResult(raw []byte) {
+	c.result = raw
+}
+
+func (c *Context) GetResult() []byte {
+	return c.result
+}
+
 func (c *Context) Next() (err error) {
 	c.index++
 	for c.index < int8(len(c.handlers)) {
 		err = c.handlers[c.index](c)
 		if err != nil {
 			c.index = int8(len(c.handlers))
-		}else{
+		} else {
 			c.index++
 		}
 	}
