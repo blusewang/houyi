@@ -57,11 +57,7 @@ func (c *Context) Next() (err error) {
 	c.index++
 	for c.index < int8(len(c.handlers)) {
 		err = c.handlers[c.index](c)
-		if err != nil {
-			c.index = int8(len(c.handlers))
-		} else {
-			c.index++
-		}
+		c.index++
 	}
 	return
 }

@@ -1,5 +1,9 @@
 package houyi
 
+import (
+	"fmt"
+)
+
 // ILayer defines all router handle interface includes single and group router.
 type ILayer interface {
 	Use(...HandlerFunc) ILayer
@@ -30,7 +34,9 @@ func (l *Layer) NewLayer(name string) *Layer {
 }
 
 func (l *Layer) Hit(name string, handler HandlerFunc) {
-	l.engine.lines[l.combineLayer(name)] = append(l.handlers,handler)
+	path := l.combineLayer(name)
+	l.engine.lines[path] = append(l.handlers, handler)
+	_, _ = fmt.Fprintf(DefaultWriter, "[HouYi] %-25s --> %s (%d handlers)\n", path, nameOfFunction(handler), len(l.engine.lines[path]))
 }
 
 var _ ILayer = &Layer{}
@@ -38,9 +44,9 @@ var _ ILayer = &Layer{}
 func (l *Layer) combineLayer(name string) string {
 	if l.root {
 		return name
-	}else if name == "" {
+	} else if name == "" {
 		return l.basePath
-	}else{
+	} else {
 		return l.basePath + l.engine.separator + name
 	}
 }

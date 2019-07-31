@@ -8,12 +8,16 @@ import (
 func TestNew(t *testing.T) {
 	y := New()
 	y.
+		Use(Recovery()).
 		NewLayer("a").
 		Use(func(context *Context) (err error) {
 			log.Println("middle 1")
+			err = context.Next()
+			panic("panic test")
 			return
 		}).
 		Use(func(context *Context) (err error) {
+		err = context.Next()
 			log.Println("middle 2")
 			return
 		}).

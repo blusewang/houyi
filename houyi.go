@@ -2,9 +2,15 @@ package houyi
 
 import (
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"sync"
 )
+
+var DefaultWriter io.Writer = os.Stdout
+
+var DefaultErrorWriter io.Writer = os.Stderr
 
 // HandlerFunc defines the handler used by gin middleware as return value.
 type HandlerFunc func(*Context) error
