@@ -8,7 +8,7 @@ import (
 type ILayer interface {
 	Use(...HandlerFunc) ILayer
 	NewLayer(string) *Layer
-	Hit(string, HandlerFunc)
+	Hit(string, HandlerFunc) *Layer
 }
 
 // Layer is used internally to configure router, a Layer is associated with
@@ -33,10 +33,15 @@ func (l *Layer) NewLayer(name string) *Layer {
 	}
 }
 
-func (l *Layer) Hit(name string, handler HandlerFunc) {
+func (l *Layer) Hit(name string, handler HandlerFunc) *Layer {
 	path := l.combineLayer(name)
 	l.engine.lines[path] = append(l.handlers, handler)
 	_, _ = fmt.Fprintf(DefaultWriter, "[HouYi] %-25s --> %s (%d handlers)\n", path, nameOfFunction(handler), len(l.engine.lines[path]))
+	return &Layer{
+		handlers: l.handlers,
+		basePath: path,
+		engine:   l.engine,
+	}
 }
 
 var _ ILayer = &Layer{}

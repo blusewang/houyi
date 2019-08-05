@@ -29,7 +29,9 @@ func TestNew(t *testing.T) {
 		Hit("", func(context *Context) (err error) {
 			log.Println("hit")
 			return
-		})
+		}).Hit("c", func(context *Context) error {
+		return nil
+	})
 
 	log.Println(y.Handle("a.b", []byte("data")))
 }
