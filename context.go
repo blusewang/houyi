@@ -8,6 +8,7 @@ import (
 )
 
 type Context struct {
+	env      interface{}
 	handlers HandlersChain
 	index    int8
 	path     string
@@ -51,6 +52,10 @@ func (c *Context) SetResult(raw []byte) {
 
 func (c *Context) GetResult() []byte {
 	return c.result
+}
+
+func (c *Context) GetEnv() interface{} {
+	return c.env
 }
 
 func (c *Context) Next() (err error) {

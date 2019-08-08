@@ -48,9 +48,10 @@ func New() *Engine {
 	return e
 }
 
-func (e *Engine) Handle(path string, data []byte) (result []byte, err error) {
+func (e *Engine) Handle(path string, data []byte, env interface{}) (result []byte, err error) {
 	if e.lines[path] != nil {
 		c := e.pool.Get().(*Context)
+		c.env = env
 		c.path = path
 		c.data = data
 		c.index = -1
