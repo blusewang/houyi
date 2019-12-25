@@ -12,7 +12,7 @@ type Context struct {
 	env      interface{}
 	handlers HandlersChain
 	index    int8
-	path     string
+	uri      string
 	data     []byte
 	result   []byte
 	engine   *Engine
@@ -45,8 +45,8 @@ func (c *Context) String() (data string) {
 	return
 }
 
-func (c *Context) GetPath() (data string) {
-	return c.path
+func (c *Context) GetUri() (data string) {
+	return c.uri
 }
 
 func (c *Context) SetResult(raw []byte) {

@@ -48,14 +48,14 @@ func New() *Engine {
 	return e
 }
 
-func (e *Engine) Handle(path string, data []byte, env interface{}) (result []byte, err error) {
-	if e.lines[path] != nil {
+func (e *Engine) Handle(uri string, data []byte, env interface{}) (result []byte, err error) {
+	if e.lines[uri] != nil {
 		c := e.pool.Get().(*Context)
 		c.env = env
-		c.path = path
+		c.uri = uri
 		c.data = data
 		c.index = -1
-		c.handlers = e.lines[path]
+		c.handlers = e.lines[uri]
 
 		err = c.Next()
 		result = c.GetResult()
@@ -63,7 +63,7 @@ func (e *Engine) Handle(path string, data []byte, env interface{}) (result []byt
 		e.pool.Put(c)
 	} else {
 		log.Println(e.lines)
-		err = fmt.Errorf("[%v]没有可命中的服务", path)
+		err = fmt.Errorf("[%v]没有可命中的服务", uri)
 	}
 	return
 }

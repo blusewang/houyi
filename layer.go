@@ -34,12 +34,12 @@ func (l *Layer) NewLayer(name string) *Layer {
 }
 
 func (l *Layer) Hit(name string, handler HandlerFunc) *Layer {
-	path := l.combineLayer(name)
-	l.engine.lines[path] = append(l.handlers, handler)
-	_, _ = fmt.Fprintf(DefaultWriter, "[HouYi] %-25s --> %s (%d handlers)\n", path, nameOfFunction(handler), len(l.engine.lines[path]))
+	uri := l.combineLayer(name)
+	l.engine.lines[uri] = append(l.handlers, handler)
+	_, _ = fmt.Fprintf(DefaultWriter, "[HouYi] %-25s --> %s (%d handlers)\n", uri, nameOfFunction(handler), len(l.engine.lines[uri]))
 	return &Layer{
 		handlers: l.handlers,
-		basePath: path,
+		basePath: uri,
 		engine:   l.engine,
 	}
 }
