@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
+	"github.com/golang/protobuf/proto"
 	"unicode/utf8"
 )
 
@@ -26,13 +27,15 @@ func (c *Context) Bind(o interface{}) (err error) {
 	if _, err = b.Write(c.data); err != nil {
 		return
 	}
-	err = gob.NewDecoder(&b).Decode(o)
-	return
+	return gob.NewDecoder(&b).Decode(o)
 }
 
 func (c *Context) BindJson(o interface{}) (err error) {
-	err = json.Unmarshal(c.data, o)
-	return
+	return json.Unmarshal(c.data, o)
+}
+
+func (c *Context) BindProtoBuf(o proto.Message) (err error) {
+	return proto.Unmarshal(c.data, o)
 }
 
 func (c *Context) String() (data string) {
