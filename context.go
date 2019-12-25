@@ -53,6 +53,11 @@ func (c *Context) SetResult(raw []byte) {
 	c.result = raw
 }
 
+func (c *Context) ProtoBuf(o proto.Message) (err error) {
+	c.result,err = proto.Marshal(o)
+	return
+}
+
 func (c *Context) GetResult() []byte {
 	return c.result
 }
