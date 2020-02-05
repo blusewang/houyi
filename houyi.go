@@ -62,7 +62,7 @@ func (e *Engine) Handle(uri string, data []byte, env interface{}) (result []byte
 
 		e.pool.Put(c)
 	} else {
-		log.Println(e.lines)
+		log.Printf("[%v]没有可命中的服务", uri)
 		err = fmt.Errorf("[%v]没有可命中的服务", uri)
 	}
 	return
