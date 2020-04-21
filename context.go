@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"github.com/golang/protobuf/proto"
+	"time"
 	"unicode/utf8"
 )
 
@@ -16,6 +17,22 @@ type Context struct {
 	data     []byte
 	result   []byte
 	engine   *Engine
+}
+
+func (c *Context) Deadline() (deadline time.Time, ok bool) {
+	return
+}
+
+func (c *Context) Done() <-chan struct{} {
+	return nil
+}
+
+func (c *Context) Err() error {
+	return nil
+}
+
+func (c *Context) Value(key interface{}) interface{} {
+	return nil
 }
 
 func (c *Context) RawData() []byte {
@@ -54,7 +71,7 @@ func (c *Context) SetResult(raw []byte) {
 }
 
 func (c *Context) ProtoBuf(o proto.Message) (err error) {
-	c.result,err = proto.Marshal(o)
+	c.result, err = proto.Marshal(o)
 	return
 }
 
